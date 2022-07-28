@@ -267,6 +267,19 @@ func (d Data) GetFileBytes(key string) ([]byte, error) {
 	}
 }
 
+func (d Data) GetFileReader(key string) (io.Reader, error) {
+	fileHeader, found := d.Files[key]
+	if !found {
+		return nil, nil
+	} else {
+		file, err := fileHeader.Open()
+		if err != nil {
+			return nil, err
+		}
+		return file, nil
+	}
+}
+
 // GetStringsSplit returns the first element in data[key] split into a slice delimited by delim.
 func (d Data) GetStringsSplit(key string, delim string) []string {
 	if !d.KeyExists(key) || len(d.Values[key]) == 0 {
